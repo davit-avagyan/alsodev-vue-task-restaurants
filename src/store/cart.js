@@ -23,6 +23,10 @@ export default {
       state.items.push(item)
       localStorage.setItem('cart', JSON.stringify(state.items))
     },
+    DELETE_ITEM(state, item) {
+      state.items = state.items.filter(i => JSON.stringify(i.item) !== JSON.stringify(item.item))
+      localStorage.setItem('cart', JSON.stringify(state.items))
+    },
     UPDATE_ITEM(state, item) {
       state.items = state.items.map(i => {
         if (JSON.stringify(i.item) === JSON.stringify(item.item)) {
@@ -59,8 +63,19 @@ export default {
       updatedItem.count++
       commit('UPDATE_ITEM', updatedItem)
     },
-    decrementItem({commit, getters}, item) {
+    async decrementItem({dispatch, commit, getters}, item) {
+      const updatedItem = await dispatch('findItem', item)
+      if (!updatedItem) {
+        return
+      }
 
+      if(updatedItem.count === 1) {
+        commit('DELETE_ITEM', updatedItem)
+        return
+      }
+
+      updatedItem.count--
+      commit('UPDATE_ITEM', updatedItem)
     },
     ifItemExists({ getters }, item) {
       if (!getters.getItems.length) {

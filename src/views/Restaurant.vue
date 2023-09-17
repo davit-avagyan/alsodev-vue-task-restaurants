@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <section class="menu">
-      <div class="section-heading" style="justify-content: space-between">
+      <div class="section-heading">
         <div>
           <h2 class="section-title restaurant-title">{{ partner.name }}</h2>
           <div class="card-info">
